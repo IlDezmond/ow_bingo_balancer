@@ -3,6 +3,7 @@ import os
 from balancer import Balancer
 from player import Player
 from openpyxl import Workbook
+import sys
 
 games = []
 
@@ -28,7 +29,6 @@ def write_games_to_xlsx(games):
                 save_flag = True
         except PermissionError:
             pass
-
 
 
 def main_balance_process(trimmed_lines, games_counter):
@@ -66,6 +66,8 @@ def main():
                 'Количество игроков должно быть равно 5. \n'
                 'Текущее количество игроков: ' + str(len(trimmed_lines))
             )
+            sys.exit()
+
 
     games_counter = 0
     while games_counter < 1 or games_counter > 500:
@@ -80,7 +82,7 @@ def main():
         except ValueError:
             print('Число введи, дебил!')
     main_balance_process(trimmed_lines, games_counter)
-    print(games)
+    # print(games)
     write_games_to_xlsx(games)
 
 
