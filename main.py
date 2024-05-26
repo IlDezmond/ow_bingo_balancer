@@ -44,27 +44,31 @@ def main_balance_process(trimmed_lines, games_counter):
     #     )
 
     for game in range(1, games_counter):
-        for i in range(100):
+        for i in range(300):
             random.shuffle(players)
             current_game = balancer.balance()
             permutations = [
                 current_game,
                 [current_game[0], current_game[2], current_game[1], current_game[3], current_game[4]],
                 [current_game[0], current_game[1], current_game[2], current_game[4], current_game[3]],
+                [current_game[0], current_game[2], current_game[1], current_game[4], current_game[3]],
             ]
-            p1, p2, p3 = 0, 0, 0
-            p = [p1, p2, p3]
-            for p_i, p_v in enumerate(p):
+            p = {
+                0: 0,
+                1: 0,
+                2: 0,
+                3: 0
+            }
+            for p_i in range(4):
                 for game_i in games:
                     if permutations[p_i] == game_i:
                         p[p_i] += 1
-            s = sum(p)
+            s = sum(p.values())
             # print(s)
-            if s - (len(games) // 15) > 0:
+            if s - (len(games) // 20) > 0:
                 continue
-
-            games.append(current_game)
             break
+        games.append(current_game)
         balancer.current_team_state.increase_all_counters()
         # print(current_game)
         # for player in players:
