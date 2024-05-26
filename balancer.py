@@ -20,14 +20,8 @@ class TeamState:
         self.heal1.heal_counter += 1
         self.heal2.heal_counter += 1
 
-    def return_players(self) -> dict[str, Player]:
-        return {
-            'tank1': self.tank1,
-            'dd1': self.dd1,
-            'dd2': self.dd2,
-            'heal1': self.heal1,
-            'heal2': self.heal2
-        }
+    def return_players(self):
+        return [self.tank1, self.dd1, self.dd2, self.heal1, self.heal2]
 
 
 class Balancer:
@@ -79,5 +73,5 @@ class Balancer:
                 players_set.remove(player)
                 setattr(self.current_team_state, f'{role}{i + 1}', player)
 
-        self.current_team_state.increase_all_counters()
+        # self.current_team_state.increase_all_counters()
         return self.current_team_state.return_players()
