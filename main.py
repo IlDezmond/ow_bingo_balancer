@@ -68,17 +68,14 @@ def main():
             )
             sys.exit()
 
-
     games_counter = 0
     while games_counter < 1 or games_counter > 500:
         try:
             games_counter = int(input('Введите количество игр: '))
             if games_counter < 1:
-                games_counter = int(input('Количество игр должно быть больше 0.\n'
-                                          'Введите количество игр: '))
+                print('Количество игр должно быть больше 0.')
             elif games_counter > 500:
-                games_counter = int(input('А не дохуя ли?\n'
-                                          'Введите количество игр: '))
+                print('А не дохуя ли?\n')
         except ValueError:
             print('Число введи, дебил!')
     main_balance_process(trimmed_lines, games_counter)
