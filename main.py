@@ -1,10 +1,34 @@
 import os
 
-from player import Player
 from balancer import Balancer
-
+from player import Player
+from openpyxl import Workbook
 
 games = []
+
+
+def write_games_to_xlsx(games):
+    wb = Workbook()
+    ws = wb.active
+    ws.append(['Tank', 'DD1', 'DD2', 'Heal1', 'Heal2'])
+    for row in games:
+        ws.append(list(map(str, row.values())))
+
+    save_flag = False
+    counter = 0
+    while not save_flag and counter < 100:
+        try:
+            if counter <= 0:
+                counter += 1
+                wb.save('games.xlsx')
+                save_flag = True
+            else:
+                counter += 1
+                wb.save(f'games{counter}.xlsx')
+                save_flag = True
+        except PermissionError:
+            pass
+
 
 
 def main_balance_process(trimmed_lines, games_counter):
@@ -12,20 +36,20 @@ def main_balance_process(trimmed_lines, games_counter):
     balancer = Balancer(players)
     current_game = balancer.init_balance()
     games.append(current_game)
-    print(current_game)
-    for player in players:
-        print(
-            f'{player.name} - {player.tank_counter=} - {player.dd_counter=} - {player.heal_counter=}'
-        )
+    # print(current_game)
+    # for player in players:
+    #     print(
+    #         f'{player.name} - {player.tank_counter=} - {player.dd_counter=} - {player.heal_counter=}'
+    #     )
 
     for game in range(games_counter - 1):
         current_game = balancer.balance()
         games.append(current_game)
-        print(current_game)
-        for player in players:
-            print(
-                f'{player.name} - {player.tank_counter=} - {player.dd_counter=} - {player.heal_counter=}'
-            )
+        # print(current_game)
+        # for player in players:
+        #     print(
+        #         f'{player.name} - {player.tank_counter=} - {player.dd_counter=} - {player.heal_counter=}'
+        #     )
 
 
 def main():
@@ -43,8 +67,21 @@ def main():
                 'Текущее количество игроков: ' + str(len(trimmed_lines))
             )
 
-    games_counter = 10  # int(input('Введите количество игр: '))
+    games_counter = 0
+    while games_counter < 1 or games_counter > 500:
+        try:
+            games_counter = int(input('Введите количество игр: '))
+            if games_counter < 1:
+                games_counter = int(input('Количество игр должно быть больше 0.\n'
+                                          'Введите количество игр: '))
+            elif games_counter > 500:
+                games_counter = int(input('А не дохуя ли?\n'
+                                          'Введите количество игр: '))
+        except ValueError:
+            print('Число введи, дебил!')
     main_balance_process(trimmed_lines, games_counter)
+    print(games)
+    write_games_to_xlsx(games)
 
 
 if __name__ == '__main__':
